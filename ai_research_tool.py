@@ -1,23 +1,11 @@
 import streamlit as st
 import openai
 
-# Set up OpenAI API key
-# SECURITY WARNING: Revoke this key after testing and replace with a new one
-openai.api_key = "OPENAI_API_KEY"
-
+# Set up OpenAI API key from secrets
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # Function to get company research from OpenAI
 def research_company(company_name, detailed=False):
-    """
-    Fetches company research from OpenAI with an industry-specific emoji.
-    
-    Args:
-        company_name (str): The name of the company to research.
-        detailed (bool): If True, provides a deeper analysis; if False, provides a concise bulleted list.
-    
-    Returns:
-        str: Markdown-formatted research summary with emoji.
-    """
     if detailed:
         prompt = f"""
         Provide a detailed, in-depth analysis of {company_name} with the following sections:
@@ -55,13 +43,10 @@ def research_company(company_name, detailed=False):
         temperature=0.7
     )
     
-    # Extract the emoji and content from the response
     result = response.choices[0].message.content
     lines = result.split('\n')
-    emoji = lines[0].strip() if lines and lines[0].strip() else "❓"  # Default emoji if none found
+    emoji = lines[0].strip() if lines and lines[0].strip() else "❓"
     content = '\n'.join(lines[1:]) if len(lines) > 1 else result
-    
-    # Wrap emoji in larger font size
     formatted_result = f"<div style='font-size: 3em;'>{emoji}</div>\n\n{content}"
     formatted_result += f"\n\n*Generated using GPT-4o on April 03, 2025*"
     return formatted_result
@@ -154,7 +139,7 @@ if st.button("Research"):
 # Display concise results if available
 if st.session_state.concise_result:
     st.markdown("### Company Summary")
-    st.markdown(st.session_state.concise_result, unsafe_allow_html=True)  # Enable HTML rendering
+    st.markdown(st.session_state.concise_result, unsafe_allow_html=True)
 
     if st.button("More Info"):
         with st.spinner("Fetching detailed analysis..."):
@@ -167,7 +152,7 @@ if st.session_state.concise_result:
 # Display detailed results if available
 if st.session_state.detailed_result:
     st.markdown("### Detailed Analysis")
-    st.markdown(st.session_state.detailed_result, unsafe_allow_html=True)  # Enable HTML rendering
+    st.markdown(st.session_state.detailed_result, unsafe_allow_html=True)
 
 # Add a footer
 st.write("---")
