@@ -1,17 +1,4 @@
 import streamlit as st
-
-st.markdown(
-    """
-    <head>
-        <meta property="og:image" content="https://yourdomain.com/path-to-image.png">
-        <meta property="og:title" content="Your App Title">
-        <meta property="og:description" content="A brief description of your app.">
-    </head>
-    """,
-    unsafe_allow_html=True
-)
-
-import streamlit as st
 import openai
 
 # Retrieve the API key safely without printing it
@@ -37,6 +24,7 @@ def research_company(company_name, detailed=False):
         - Executive team
         - Size and location
         - Revenue or funding (if public)
+        - Marketing Data: Include any recent data on ad spend, digital vs. traditional marketing, and show any available marketing assets or campaigns.
         - Unique aspects
         Format the response with clear section headers using markdown (e.g., ## Section Name) and provide detailed paragraphs for each section. If information is unavailable, say 'Information not readily available.' At the start of the response, include an emoji that represents the company's primary industry (e.g., 🚗 for automotive, 💻 for tech, 🏥 for healthcare).
         """
@@ -50,6 +38,7 @@ def research_company(company_name, detailed=False):
         - Executive team (list CEO, CFO, and one other key executive with titles)
         - Size and location (employee count, HQ location, and major offices)
         - Revenue or funding (if public, latest annual revenue; if private, notable funding rounds)
+        - Marketing Data: Summarize any recent marketing data including ad spend, digital vs. traditional mix, and list any available marketing assets or campaigns.
         - Unique aspects (2-3 distinctive features or achievements)
         Format each section as a markdown bulleted list (e.g., - Item). Keep it clear and concise but informative. If information is unavailable, say 'Information not readily available.' At the start of the response, include an emoji that represents the company's primary industry (e.g., 🚗 for automotive, 💻 for tech, 🏥 for healthcare).
         """
