@@ -1,8 +1,16 @@
 import streamlit as st
 import openai
 
-# Set up OpenAI API key from secrets
-openai.api_key = st.secrets["OPENAI_API_KEY"]
+# Attempt to load the API key from secrets
+api_key = st.secrets.get("OPENAI_API_KEY")
+if not api_key:
+    st.error(
+        "OpenAI API key not found! Please ensure you have added it to your secrets.toml "
+        "in the .streamlit folder (locally) or in the Streamlit Cloud secrets configuration."
+    )
+    st.stop()  # Stop the app if the API key isn't available
+
+openai.api_key = api_key
 
 # Function to get company research from OpenAI
 def research_company(company_name, detailed=False):
@@ -34,7 +42,7 @@ def research_company(company_name, detailed=False):
         """
     
     response = openai.chat.completions.create(
-        model="gpt-4o",
+        model="gpt-4",  # Make sure this model is available; adjust if necessary
         messages=[
             {"role": "system", "content": "You are a helpful research assistant."},
             {"role": "user", "content": prompt}
@@ -48,7 +56,7 @@ def research_company(company_name, detailed=False):
     emoji = lines[0].strip() if lines and lines[0].strip() else "❓"
     content = '\n'.join(lines[1:]) if len(lines) > 1 else result
     formatted_result = f"<div style='font-size: 3em;'>{emoji}</div>\n\n{content}"
-    formatted_result += f"\n\n*Generated using GPT-4o on April 03, 2025*"
+    formatted_result += f"\n\n*Generated using GPT-4 on April 03, 2025*"
     return formatted_result
 
 # Custom CSS for a bright, clean look with visible text and colorful edges
