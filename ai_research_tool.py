@@ -17,30 +17,49 @@ def research_company(company_name, detailed=False):
     if detailed:
         prompt = f"""
         Provide a detailed, in-depth analysis of {company_name} with the following sections:
-        - What the company does
-        - Key products or services
-        - Industry and competitors
-        - Recent news (last 6 months)
-        - Executive team
-        - Size and location
-        - Revenue or funding (if public)
-        - Marketing Data: Include any recent data on ad spend, digital vs. traditional marketing, and show any available marketing assets or campaigns.
-        - Unique aspects
-        Format the response with clear section headers using markdown (e.g., ## Section Name) and provide detailed paragraphs for each section. If information is unavailable, say 'Information not readily available.' At the start of the response, include an emoji that represents the company's primary industry (e.g., 🚗 for automotive, 💻 for tech, 🏥 for healthcare).
+        ## Company Overview
+        Describe what the company does.
+        
+        ## Products & Services
+        List key products or services.
+        
+        ## Industry & Competitors
+        Describe the industry and list 3-4 major competitors.
+        
+        ## Recent News
+        Summarize any major news from the last 6 months.
+        
+        ## Executive Team
+        Identify the CEO and other key executives.
+        
+        ## Size & Location
+        Provide employee count, headquarters location, and major offices.
+        
+        ## Revenue/Funding
+        State the latest annual revenue (if public) or notable funding rounds (if private).
+        
+        ## Marketing Data
+        Provide any recent marketing data, including ad spend, a breakdown of digital vs. traditional marketing, and any marketing assets or campaign examples you can find.
+        
+        ## Unique Aspects
+        Highlight 2-3 distinctive features or achievements.
+        
+        Format the response with clear section headers using markdown (e.g., ## Section Name) and provide detailed paragraphs for each section. If information is unavailable, say "Information not readily available." At the very beginning, include an emoji that represents the company's primary industry (e.g., 🚗 for automotive, 💻 for tech, 🏥 for healthcare).
         """
     else:
         prompt = f"""
-        Provide a concise summary of {company_name} with the following sections in a bulleted list format:
-        - What the company does (include primary focus and mission)
-        - Key products or services (list main offerings with a brief description)
-        - Industry and competitors (name industry and 3-4 key competitors)
-        - Recent news (last 6 months, include 2-3 key events)
-        - Executive team (list CEO, CFO, and one other key executive with titles)
-        - Size and location (employee count, HQ location, and major offices)
-        - Revenue or funding (if public, latest annual revenue; if private, notable funding rounds)
-        - Marketing Data: Summarize any recent marketing data including ad spend, digital vs. traditional mix, and list any available marketing assets or campaigns.
-        - Unique aspects (2-3 distinctive features or achievements)
-        Format each section as a markdown bulleted list (e.g., - Item). Keep it clear and concise but informative. If information is unavailable, say 'Information not readily available.' At the start of the response, include an emoji that represents the company's primary industry (e.g., 🚗 for automotive, 💻 for tech, 🏥 for healthcare).
+        Provide a concise summary of {company_name} with the following sections (format each as a markdown bullet):
+        - **Company Overview:** What the company does and its primary mission.
+        - **Products & Services:** Key offerings with a brief description.
+        - **Industry & Competitors:** The industry and 3-4 major competitors.
+        - **Recent News:** 2-3 key events from the last 6 months.
+        - **Executive Team:** List the CEO, CFO, and one other key executive with titles.
+        - **Size & Location:** Employee count, headquarters, and major offices.
+        - **Revenue/Funding:** Latest annual revenue (if public) or notable funding rounds.
+        - **Marketing Data:** A summary of recent marketing data, including ad spend, digital vs. traditional breakdown, and any available marketing assets or campaign examples.
+        - **Unique Aspects:** 2-3 distinctive features or achievements.
+        
+        At the start, include an emoji representing the company's primary industry (e.g., 🚗, 💻, 🏥). If information is unavailable for any section, say "Information not readily available."
         """
     
     response = openai.chat.completions.create(
