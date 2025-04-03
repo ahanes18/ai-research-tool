@@ -63,7 +63,7 @@ def research_company(company_name, detailed=False):
         """
     
     response = openai.chat.completions.create(
-        model="gpt-4",  # Adjust the model as needed
+        model="gpt-4",  # Adjust the model as needed.
         messages=[
             {"role": "system", "content": "You are a helpful research assistant."},
             {"role": "user", "content": prompt}
@@ -76,12 +76,12 @@ def research_company(company_name, detailed=False):
     lines = result.split('\n')
     emoji = lines[0].strip() if lines and lines[0].strip() else "❓"
     content = '\n'.join(lines[1:]) if len(lines) > 1 else result
-    # Use font-size 1em so the emoji matches the other text
+    # Use font-size 1em so the emoji is the same size as the text
     formatted_result = f"<div style='font-size: 1em;'>{emoji}</div>\n\n{content}"
     formatted_result += f"\n\n*Generated using GPT-4 on April 03, 2025*"
     return formatted_result
 
-# Custom CSS for a bright, clean look and to ensure markdown headers are uniformly sized
+# Custom CSS for a bright, clean look and mobile responsiveness
 st.markdown("""
     <style>
     body {
@@ -136,6 +136,12 @@ st.markdown("""
          font-size: 1em !important;
          margin: 0 !important;
          padding: 0 !important;
+    }
+    /* Further reduce header sizes on small screens */
+    @media only screen and (max-width: 600px) {
+         .stMarkdown h1, .stMarkdown h2, .stMarkdown h3, .stMarkdown h4, .stMarkdown h5, .stMarkdown h6 {
+              font-size: 0.9em !important;
+         }
     }
     .stWarning, .stError {
         color: #333333;
