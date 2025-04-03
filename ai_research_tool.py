@@ -74,11 +74,10 @@ def research_company(company_name, detailed=False):
     
     result = response.choices[0].message.content
     lines = result.split('\n')
-    emoji = lines[0].strip() if lines and lines[0].strip() else "❓"
-    content = '\n'.join(lines[1:]) if len(lines) > 1 else result
-    formatted_result = f"<div style='font-size: 3em;'>{emoji}</div>\n\n{content}"
-    formatted_result += f"\n\n*Generated using GPT-4 on April 03, 2025*"
-    return formatted_result
+emoji = lines[0].strip() if lines and lines[0].strip() else "❓"
+content = '\n'.join(lines[1:]) if len(lines) > 1 else result
+formatted_result = f"<div style='font-size: 1em;'>{emoji}</div>\n\n{content}"
+
 
 # Custom CSS for a bright, clean look with visible text and colorful edges
 st.markdown("""
