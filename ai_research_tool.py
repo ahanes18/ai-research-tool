@@ -1,4 +1,17 @@
 import streamlit as st
+
+st.markdown(
+    """
+    <head>
+        <meta property="og:image" content="https://yourdomain.com/path-to-image.png">
+        <meta property="og:title" content="Your App Title">
+        <meta property="og:description" content="A brief description of your app.">
+    </head>
+    """,
+    unsafe_allow_html=True
+)
+
+import streamlit as st
 import openai
 
 # Retrieve the API key safely without printing it
