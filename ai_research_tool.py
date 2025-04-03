@@ -1,10 +1,7 @@
 import streamlit as st
 import openai
 
-# Debug: Print st.secrets to verify it's reading your API key correctly.
-st.write("DEBUG: st.secrets contents ->", st.secrets)
-
-# Retrieve the API key safely
+# Retrieve the API key safely without printing it
 api_key = st.secrets.get("OPENAI_API_KEY")
 if not api_key:
     st.error(
@@ -12,9 +9,6 @@ if not api_key:
         "Ensure your secrets are set up correctly."
     )
     st.stop()
-else:
-    # Optionally display a masked version for debugging
-    st.write("OPENAI_API_KEY found:", api_key[:10] + "..." )
 
 openai.api_key = api_key
 
