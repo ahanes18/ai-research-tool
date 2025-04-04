@@ -40,7 +40,7 @@ def research_company(company_name, detailed=False):
         State the latest annual revenue (if public) or notable funding rounds (if private).
 
         ## Marketing Data
-        Provide any recent marketing data, including ad spend, the breakdown of digital vs. traditional marketing, and any available marketing assets or campaign examples.
+        Provide any recent marketing data, including ad spend, a breakdown of digital vs. traditional marketing, and any available marketing assets or campaign examples.
 
         ## Unique Aspects
         Highlight 2-3 distinctive features or achievements.
@@ -64,7 +64,7 @@ def research_company(company_name, detailed=False):
         """
     
     response = openai.chat.completions.create(
-        model="gpt-4o",  # Using ChatGPT 4o with search capabilities for current info.
+        model="gpt-4o",
         messages=[
             {
                 "role": "system",
@@ -177,4 +177,27 @@ if st.button("Research"):
                 st.session_state.concise_result = concise_result
                 st.session_state.detailed_result = None
             except Exception as e:
-                st.error(f
+                st.error(f"An error occurred: {str(e)}")
+    else:
+        st.warning("Please enter a company name.")
+
+# Display concise results if available
+if st.session_state.concise_result:
+    st.markdown("### Company Summary")
+    st.markdown(st.session_state.concise_result, unsafe_allow_html=True)
+    if st.button("More Info"):
+        with st.spinner("Fetching detailed analysis..."):
+            try:
+                detailed_result = research_company(st.session_state.company_name, detailed=True)
+                st.session_state.detailed_result = detailed_result
+            except Exception as e:
+                st.error(f"An error occurred: {str(e)}")
+
+# Display detailed results if available
+if st.session_state.detailed_result:
+    st.markdown("### Detailed Analysis")
+    st.markdown(st.session_state.detailed_result, unsafe_allow_html=True)
+
+# Footer
+st.write("---")
+st.write("Built with Streamlit and OpenAI by a friendly AI assistant.")
