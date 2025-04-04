@@ -16,7 +16,7 @@ openai.api_key = api_key
 def research_company(company_name, detailed=False):
     if detailed:
         prompt = f"""
-        Using your real-time search capabilities, provide a detailed, up-to-date analysis of {company_name} (as of 2025) by fetching data from the web and company URLs. Include the following sections:
+        Using your real-time search capabilities, fetch current and verified data (up-to-date as of 2025) by referencing the company's official website and reliable business sources. Provide a detailed analysis of {company_name} with the following sections:
 
         ## Company Overview
         Describe what the company does.
@@ -28,10 +28,10 @@ def research_company(company_name, detailed=False):
         Describe the industry and list 3-4 major competitors.
 
         ## Recent News
-        Summarize any major news from the last 6 months (only include news from 2024-2025; exclude outdated news such as from 2021).
+        Summarize major news from the last 6 months (only include news from 2024-2025; exclude outdated info such as from 2021).
 
         ## Executive Team
-        For C-level executives, fetch current details from official company websites or reliable business sources. List the CEO and other key executives (e.g., CFO, CTO) ensuring the info is verified and up-to-date.
+        Search for and verify current C-level executive details directly from the company's official website (include the URL if available). List the CEO and other key executives (e.g., CFO, CTO). Only include verified and current data.
 
         ## Size & Location
         Provide employee count, headquarters location, and major offices.
@@ -40,24 +40,24 @@ def research_company(company_name, detailed=False):
         State the latest annual revenue (if public) or notable funding rounds (if private).
 
         ## Marketing Data
-        Provide any recent marketing data, including ad spend, a breakdown of digital vs. traditional marketing, and any available marketing assets or campaign examples.
+        Provide recent marketing data, including ad spend, digital vs. traditional breakdown, and any available marketing assets or campaign examples.
 
         ## Unique Aspects
         Highlight 2-3 distinctive features or achievements.
 
-        Format your response using clear markdown section headers (e.g., ## Section Name) and detailed paragraphs for each section. If any information is unavailable, state "Information not readily available." Begin your response with an emoji representing the company's primary industry (e.g., 🚗, 💻, 🏥).
+        Format your response using clear markdown section headers (e.g., ## Section Name) and detailed paragraphs. If any information is unavailable, say "Information not readily available." Begin with an emoji representing the company's primary industry (e.g., 🚗, 💻, 🏥).
         """
     else:
         prompt = f"""
-        Using your real-time search capabilities, provide a concise summary of {company_name} (up-to-date as of 2025) by fetching data from the web and company URLs. Format the summary as a markdown bullet list with the following items:
+        Using your real-time search capabilities and by referencing the company's official website and reliable sources, provide a concise summary of {company_name} (up-to-date as of 2025) with the following items (format each as a markdown bullet):
         - **Company Overview:** What the company does and its primary mission.
         - **Products & Services:** Key offerings with a brief description.
         - **Industry & Competitors:** The industry and 3-4 major competitors.
-        - **Recent News:** 2-3 key events from the last 6 months (only include news from 2024-2025, avoiding outdated info such as from 2021).
-        - **Executive Team:** List the current CEO, CFO, and one other key executive. Ensure these details are fetched from official company sources.
+        - **Recent News:** 2-3 key events from the last 6 months (only include recent news from 2024-2025; avoid outdated info such as from 2021).
+        - **Executive Team:** List the current CEO, CFO, and one other key executive. Verify these details by referencing the company's official website and include the website URL if available.
         - **Size & Location:** Employee count, headquarters, and major offices.
         - **Revenue/Funding:** Latest annual revenue (if public) or notable funding rounds.
-        - **Marketing Data:** A summary of recent marketing data, including ad spend, digital vs. traditional breakdown, and any available marketing assets or campaign examples.
+        - **Marketing Data:** A summary of recent marketing data including ad spend, digital vs. traditional breakdown, and any available marketing assets or campaign examples.
         - **Unique Aspects:** 2-3 distinctive features or achievements.
 
         Begin your response with an emoji representing the company's primary industry (e.g., 🚗, 💻, 🏥). If information is unavailable for any item, say "Information not readily available."
@@ -69,9 +69,8 @@ def research_company(company_name, detailed=False):
             {
                 "role": "system",
                 "content": (
-                    "You are a helpful research assistant with up-to-date search capabilities. "
-                    "Use the web and company URLs to verify information, especially for C-level executive data. "
-                    "Ensure that all news and data are current as of 2025."
+                    "You are a helpful research assistant with real-time search capabilities. "
+                    "Use the web, especially the official company website, to verify all information—particularly for C-level executive data—and ensure that all news and data are current as of 2025."
                 )
             },
             {"role": "user", "content": prompt}
