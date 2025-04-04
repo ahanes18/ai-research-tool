@@ -12,11 +12,12 @@ if not api_key:
 
 openai.api_key = api_key
 
-# Function to get company research from OpenAI
+# Function to get company research from OpenAI using GPT-4o with search capabilities
 def research_company(company_name, detailed=False):
     if detailed:
         prompt = f"""
-        Provide a detailed, in-depth analysis of {company_name} with the following sections:
+        Using your search capabilities for up-to-date data, provide a detailed, in-depth analysis of {company_name} with the following sections:
+        
         ## Company Overview
         Describe what the company does.
         
@@ -39,16 +40,16 @@ def research_company(company_name, detailed=False):
         State the latest annual revenue (if public) or notable funding rounds (if private).
         
         ## Marketing Data
-        Provide any recent marketing data, including ad spend, a breakdown of digital vs. traditional marketing, and any marketing assets or campaign examples you can find.
+        Provide any recent marketing data, including ad spend, a breakdown of digital vs. traditional marketing, and any marketing assets or campaign examples.
         
         ## Unique Aspects
         Highlight 2-3 distinctive features or achievements.
         
-        Format the response with clear section headers using markdown (e.g., ## Section Name) and provide detailed paragraphs for each section. If information is unavailable, say "Information not readily available." At the very beginning, include an emoji that represents the company's primary industry (e.g., 🚗 for automotive, 💻 for tech, 🏥 for healthcare).
+        Format your response with clear markdown section headers (e.g., ## Section Name) and detailed paragraphs for each section. If information is unavailable, say "Information not readily available." At the very beginning, include an emoji representing the company's primary industry (e.g., 🚗 for automotive, 💻 for tech, 🏥 for healthcare).
         """
     else:
         prompt = f"""
-        Provide a concise summary of {company_name} with the following sections (format each as a markdown bullet):
+        Using your search capabilities for current data, provide a concise summary of {company_name} with the following sections (format each as a markdown bullet):
         - **Company Overview:** What the company does and its primary mission.
         - **Products & Services:** Key offerings with a brief description.
         - **Industry & Competitors:** The industry and 3-4 major competitors.
@@ -63,9 +64,15 @@ def research_company(company_name, detailed=False):
         """
     
     response = openai.chat.completions.create(
-        model="gpt-4",  # Adjust the model as needed.
+        model="gpt-4o",  # Using the ChatGPT 4o model with search capabilities for current info.
         messages=[
-            {"role": "system", "content": "You are a helpful research assistant."},
+            {
+                "role": "system",
+                "content": (
+                    "You are a helpful research assistant with search capabilities. "
+                    "Use real-time search data to provide the most current and accurate information."
+                )
+            },
             {"role": "user", "content": prompt}
         ],
         max_tokens=1500 if detailed else 700,
@@ -76,9 +83,9 @@ def research_company(company_name, detailed=False):
     lines = result.split('\n')
     emoji = lines[0].strip() if lines and lines[0].strip() else "❓"
     content = '\n'.join(lines[1:]) if len(lines) > 1 else result
-    # Use font-size 1em so the emoji is the same size as the text
+    # Use font-size 1em so the emoji and text are uniformly sized
     formatted_result = f"<div style='font-size: 1em;'>{emoji}</div>\n\n{content}"
-    formatted_result += f"\n\n*Generated using GPT-4 on April 03, 2025*"
+    formatted_result += "\n\n*Generated using ChatGPT 4o with search capabilities*"
     return formatted_result
 
 # Custom CSS for a bright, clean look and mobile responsiveness
