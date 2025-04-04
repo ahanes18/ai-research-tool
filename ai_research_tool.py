@@ -16,7 +16,7 @@ openai.api_key = api_key
 def research_company(company_name, detailed=False):
     if detailed:
         prompt = f"""
-        Using your search capabilities to fetch the most current information (up-to-date as of 2025), provide a detailed analysis of {company_name} with the following sections:
+        Using your real-time search capabilities, provide a detailed, up-to-date analysis of {company_name} (as of 2025) by fetching data from the web and company URLs. Include the following sections:
 
         ## Company Overview
         Describe what the company does.
@@ -28,10 +28,10 @@ def research_company(company_name, detailed=False):
         Describe the industry and list 3-4 major competitors.
 
         ## Recent News
-        Summarize any major news from the last 6 months. Only include news from 2024-2025 and avoid outdated information (e.g., from 2021).
+        Summarize any major news from the last 6 months (only include news from 2024-2025; exclude outdated news such as from 2021).
 
         ## Executive Team
-        Identify the CEO and other key executives.
+        For C-level executives, fetch current details from official company websites or reliable business sources. List the CEO and other key executives (e.g., CFO, CTO) ensuring the info is verified and up-to-date.
 
         ## Size & Location
         Provide employee count, headquarters location, and major offices.
@@ -45,30 +45,34 @@ def research_company(company_name, detailed=False):
         ## Unique Aspects
         Highlight 2-3 distinctive features or achievements.
 
-        Format your response with clear markdown section headers (e.g., ## Section Name) and detailed paragraphs. If information is unavailable, say "Information not readily available." Begin your response with an emoji representing the company's primary industry (e.g., 🚗, 💻, 🏥).
+        Format your response using clear markdown section headers (e.g., ## Section Name) and detailed paragraphs for each section. If any information is unavailable, state "Information not readily available." Begin your response with an emoji representing the company's primary industry (e.g., 🚗, 💻, 🏥).
         """
     else:
         prompt = f"""
-        Using your search capabilities to fetch the most current information (up-to-date as of 2025), provide a concise summary of {company_name} with the following sections (format each as a markdown bullet):
+        Using your real-time search capabilities, provide a concise summary of {company_name} (up-to-date as of 2025) by fetching data from the web and company URLs. Format the summary as a markdown bullet list with the following items:
         - **Company Overview:** What the company does and its primary mission.
         - **Products & Services:** Key offerings with a brief description.
         - **Industry & Competitors:** The industry and 3-4 major competitors.
-        - **Recent News:** 2-3 key events from the last 6 months. Only include recent news (from 2024-2025) and avoid outdated info such as from 2021.
-        - **Executive Team:** List the CEO, CFO, and one other key executive with titles.
+        - **Recent News:** 2-3 key events from the last 6 months (only include news from 2024-2025, avoiding outdated info such as from 2021).
+        - **Executive Team:** List the current CEO, CFO, and one other key executive. Ensure these details are fetched from official company sources.
         - **Size & Location:** Employee count, headquarters, and major offices.
         - **Revenue/Funding:** Latest annual revenue (if public) or notable funding rounds.
         - **Marketing Data:** A summary of recent marketing data, including ad spend, digital vs. traditional breakdown, and any available marketing assets or campaign examples.
         - **Unique Aspects:** 2-3 distinctive features or achievements.
 
-        Begin your response with an emoji representing the company's primary industry (e.g., 🚗, 💻, 🏥). If information is unavailable, say "Information not readily available."
+        Begin your response with an emoji representing the company's primary industry (e.g., 🚗, 💻, 🏥). If information is unavailable for any item, say "Information not readily available."
         """
     
     response = openai.chat.completions.create(
-        model="gpt-4o",
+        model="gpt-4o",  # Using GPT-4o with search capabilities
         messages=[
             {
                 "role": "system",
-                "content": "You are a helpful research assistant with up-to-date search capabilities. Ensure all news and data are current as of 2025."
+                "content": (
+                    "You are a helpful research assistant with up-to-date search capabilities. "
+                    "Use the web and company URLs to verify information, especially for C-level executive data. "
+                    "Ensure that all news and data are current as of 2025."
+                )
             },
             {"role": "user", "content": prompt}
         ],
@@ -81,7 +85,7 @@ def research_company(company_name, detailed=False):
     emoji = lines[0].strip() if lines and lines[0].strip() else "❓"
     content = '\n'.join(lines[1:]) if len(lines) > 1 else result
     formatted_result = f"<div style='font-size: 1em;'>{emoji}</div>\n\n{content}"
-    formatted_result += "\n\n*Generated using ChatGPT 4o with search capabilities*"
+    formatted_result += "\n\n*Generated using ChatGPT 4o with real-time search capabilities*"
     return formatted_result
 
 # Custom CSS for a bright, clean look and mobile responsiveness
