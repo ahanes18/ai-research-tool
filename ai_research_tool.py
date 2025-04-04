@@ -16,62 +16,59 @@ openai.api_key = api_key
 def research_company(company_name, detailed=False):
     if detailed:
         prompt = f"""
-        Using your search capabilities for up-to-date data, provide a detailed, in-depth analysis of {company_name} with the following sections:
-        
+        Using your search capabilities to fetch the most current information (up-to-date as of 2025), provide a detailed analysis of {company_name} with the following sections:
+
         ## Company Overview
         Describe what the company does.
-        
+
         ## Products & Services
         List key products or services.
-        
+
         ## Industry & Competitors
         Describe the industry and list 3-4 major competitors.
-        
+
         ## Recent News
-        Summarize any major news from the last 6 months.
-        
+        Summarize any major news from the last 6 months. Only include news from 2024-2025 and avoid outdated information (e.g., from 2021).
+
         ## Executive Team
         Identify the CEO and other key executives.
-        
+
         ## Size & Location
         Provide employee count, headquarters location, and major offices.
-        
+
         ## Revenue/Funding
         State the latest annual revenue (if public) or notable funding rounds (if private).
-        
+
         ## Marketing Data
-        Provide any recent marketing data, including ad spend, a breakdown of digital vs. traditional marketing, and any marketing assets or campaign examples.
-        
+        Provide any recent marketing data, including ad spend, the breakdown of digital vs. traditional marketing, and any available marketing assets or campaign examples.
+
         ## Unique Aspects
         Highlight 2-3 distinctive features or achievements.
-        
-        Format your response with clear markdown section headers (e.g., ## Section Name) and detailed paragraphs for each section. If information is unavailable, say "Information not readily available." At the very beginning, include an emoji representing the company's primary industry (e.g., 🚗 for automotive, 💻 for tech, 🏥 for healthcare).
+
+        Format your response with clear markdown section headers (e.g., ## Section Name) and detailed paragraphs. If information is unavailable, say "Information not readily available." Begin your response with an emoji representing the company's primary industry (e.g., 🚗, 💻, 🏥).
         """
     else:
         prompt = f"""
-        Using your search capabilities for current data, provide a concise summary of {company_name} with the following sections (format each as a markdown bullet):
+        Using your search capabilities to fetch the most current information (up-to-date as of 2025), provide a concise summary of {company_name} with the following sections (format each as a markdown bullet):
         - **Company Overview:** What the company does and its primary mission.
         - **Products & Services:** Key offerings with a brief description.
         - **Industry & Competitors:** The industry and 3-4 major competitors.
-        - **Recent News:** 2-3 key events from the last 6 months.
+        - **Recent News:** 2-3 key events from the last 6 months. Only include recent news (from 2024-2025) and avoid outdated info such as from 2021.
         - **Executive Team:** List the CEO, CFO, and one other key executive with titles.
         - **Size & Location:** Employee count, headquarters, and major offices.
         - **Revenue/Funding:** Latest annual revenue (if public) or notable funding rounds.
         - **Marketing Data:** A summary of recent marketing data, including ad spend, digital vs. traditional breakdown, and any available marketing assets or campaign examples.
         - **Unique Aspects:** 2-3 distinctive features or achievements.
-        
-        At the start, include an emoji representing the company's primary industry (e.g., 🚗, 💻, 🏥). If information is unavailable for any section, say "Information not readily available."
+
+        Begin your response with an emoji representing the company's primary industry (e.g., 🚗, 💻, 🏥). If information is unavailable, say "Information not readily available."
         """
     
     response = openai.chat.completions.create(
-        model="gpt-4o",  # Using the ChatGPT 4o model with search capabilities for current info.
+        model="gpt-4o",  # Using ChatGPT 4o with search capabilities for current info.
         messages=[
             {
                 "role": "system",
-                "content": (
-                    "You are a helpful research assistant with search capabilities. "
-                    "Use real-time search data to provide the most current and accurate information."
-                )
+                "content": "You are a helpful research assistant with up-to-date search capabilities. Ensure all news and data are current as of 2025."
             },
             {"role": "user", "content": prompt}
         ],
@@ -83,7 +80,6 @@ def research_company(company_name, detailed=False):
     lines = result.split('\n')
     emoji = lines[0].strip() if lines and lines[0].strip() else "❓"
     content = '\n'.join(lines[1:]) if len(lines) > 1 else result
-    # Use font-size 1em so the emoji and text are uniformly sized
     formatted_result = f"<div style='font-size: 1em;'>{emoji}</div>\n\n{content}"
     formatted_result += "\n\n*Generated using ChatGPT 4o with search capabilities*"
     return formatted_result
@@ -181,28 +177,4 @@ if st.button("Research"):
                 st.session_state.concise_result = concise_result
                 st.session_state.detailed_result = None
             except Exception as e:
-                st.error(f"An error occurred: {str(e)}")
-    else:
-        st.warning("Please enter a company name.")
-
-# Display concise results if available
-if st.session_state.concise_result:
-    st.markdown("### Company Summary")
-    st.markdown(st.session_state.concise_result, unsafe_allow_html=True)
-
-    if st.button("More Info"):
-        with st.spinner("Fetching detailed analysis..."):
-            try:
-                detailed_result = research_company(st.session_state.company_name, detailed=True)
-                st.session_state.detailed_result = detailed_result
-            except Exception as e:
-                st.error(f"An error occurred: {str(e)}")
-
-# Display detailed results if available
-if st.session_state.detailed_result:
-    st.markdown("### Detailed Analysis")
-    st.markdown(st.session_state.detailed_result, unsafe_allow_html=True)
-
-# Add a footer
-st.write("---")
-st.write("Built with Streamlit and OpenAI by a friendly AI assistant.")
+                st.error(f
