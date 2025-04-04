@@ -70,7 +70,7 @@ def research_company(company_name, detailed=False):
                 "role": "system",
                 "content": (
                     "You are a helpful research assistant with real-time search capabilities. "
-                    "Use the web, especially the official company website, to verify all information—particularly C-level executive data. "
+                    "Use the web—especially the official company website—to verify all information, particularly C-level executive data. "
                     "If you cannot fully verify the current data, include the note: 'This might be outdated, please reference the company's official website:' followed by the URL if available. "
                     "Ensure all news and data are current as of 2025."
                 )
@@ -167,7 +167,7 @@ if "detailed_result" not in st.session_state:
 
 # Streamlit UI setup
 st.markdown("<h1 style='color: #000000;'>AI Company Research Tool</h1>", unsafe_allow_html=True)
-st.write("Enter a company name to get a concise summary, with an option for deeper analysis.")
+st.write("Enter a company name to get a concise summary, with an option for deep research.")
 
 # Input field for company name
 company_name = st.text_input("Company Name", placeholder="e.g., Tesla")
@@ -180,28 +180,30 @@ if st.button("Research"):
                 concise_result = research_company(company_name, detailed=False)
                 st.session_state.company_name = company_name
                 st.session_state.concise_result = concise_result
-                st.session_state.detailed_result = None
+                st.session_state.detailed_result = None  # Reset detailed result
             except Exception as e:
                 st.error(f"An error occurred: {str(e)}")
     else:
         st.warning("Please enter a company name.")
 
-# Display concise results if available
+# If a concise result is available, display two tabs: one for the summary and one for deep research.
 if st.session_state.concise_result:
-    st.markdown("### Company Summary")
-    st.markdown(st.session_state.concise_result, unsafe_allow_html=True)
-    if st.button("More Info"):
-        with st.spinner("Fetching detailed analysis..."):
-            try:
-                detailed_result = research_company(st.session_state.company_name, detailed=True)
-                st.session_state.detailed_result = detailed_result
-            except Exception as e:
-                st.error(f"An error occurred: {str(e)}")
-
-# Display detailed results if available
-if st.session_state.detailed_result:
-    st.markdown("### Detailed Analysis")
-    st.markdown(st.session_state.detailed_result, unsafe_allow_html=True)
+    tabs = st.tabs(["Company Summary", "Deep Research"])
+    
+    with tabs[0]:
+        st.markdown("### Company Summary")
+        st.markdown(st.session_state.concise_result, unsafe_allow_html=True)
+    
+    with tabs[1]:
+        if st.session_state.detailed_result is None:
+            with st.spinner("Fetching deep research..."):
+                try:
+                    detailed_result = research_company(st.session_state.company_name, detailed=True)
+                    st.session_state.detailed_result = detailed_result
+                except Exception as e:
+                    st.error(f"An error occurred: {str(e)}")
+        st.markdown("### Detailed Analysis")
+        st.markdown(st.session_state.detailed_result, unsafe_allow_html=True)
 
 # Footer
 st.write("---")
