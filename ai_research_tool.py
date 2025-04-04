@@ -14,7 +14,7 @@ openai.api_key = api_key
 def research_company(company_name, detailed=False):
     if detailed:
         prompt = f"""
-        Using your real-time search capabilities, fetch current and verified data (up-to-date as of 2025) by referencing the company's official website and reliable business sources. Now, in Deep Research Mode, provide a comprehensive and in-depth analysis of {company_name}. Include detailed insights on the company's business strategy, market positioning, financial performance, and future outlook. Include the following sections:
+        Using your real-time search capabilities, fetch current and verified data (up-to-date as of 2025) by referencing the company's official website and reliable business sources. Now in Deep Research Mode, provide a comprehensive and in-depth analysis of {company_name}. Include detailed insights on the company's business strategy, market positioning, financial performance, and future outlook. Include the following sections:
 
         ## Company Overview
         Describe what the company does and its core business model.
@@ -65,7 +65,7 @@ def research_company(company_name, detailed=False):
         """
     
     response = openai.chat.completions.create(
-        model="gpt-4o",  # Using GPT-4o with real-time search capabilities
+        model="gpt-4o",
         messages=[
             {
                 "role": "system",
@@ -90,7 +90,7 @@ def research_company(company_name, detailed=False):
     formatted_result += "\n\n*Generated using ChatGPT 4o with real-time search capabilities*"
     return formatted_result
 
-# Custom CSS for a bright, clean look and mobile responsiveness
+# Custom CSS for styling and mobile responsiveness
 st.markdown("""
     <style>
     body {
@@ -155,6 +155,22 @@ st.markdown("""
     .stWarning, .stError {
         color: #333333;
     }
+    /* Custom styling for tab buttons */
+    div[role="tablist"] > button {
+        border: 1px solid #ccc !important;
+        background-color: #ddd !important;
+        color: #000 !important;
+        padding: 8px 16px !important;
+        border-radius: 4px !important;
+        margin-right: 5px !important;
+    }
+    div[role="tablist"] > button:hover {
+        background-color: #ccc !important;
+    }
+    div[role="tablist"] > button[aria-selected="true"] {
+        background-color: #bbb !important;
+        border: 1px solid #999 !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -191,7 +207,6 @@ if st.session_state.get("concise_result"):
                     st.session_state.detailed_result = detailed_result
                 except Exception as e:
                     st.error(f"An error occurred: {str(e)}")
-        # Set the deep research content font color to a darker shade (black)
         st.markdown("<div style='color: #000000;'>### Detailed Analysis (Deep Research Mode)</div>", unsafe_allow_html=True)
         st.markdown(f"<div style='color: #000000;'>{st.session_state.detailed_result}</div>", unsafe_allow_html=True)
 
