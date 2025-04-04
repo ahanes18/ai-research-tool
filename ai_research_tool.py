@@ -31,7 +31,7 @@ def research_company(company_name, detailed=False):
         Summarize major news from the last 6 months (only include news from 2024-2025; exclude outdated info such as from 2021).
 
         ## Executive Team
-        Search for and verify current C-level executive details directly from the company's official website (include the URL if available). List the CEO and other key executives (e.g., CFO, CTO). Only include verified and current data.
+        Search for and verify current C-level executive details directly from the company's official website. If you are not confident that the data is fully verified, include the note: "This might be outdated, please reference the company's official website:" followed by the URL if available. List the CEO and other key executives (e.g., CFO, CTO).
 
         ## Size & Location
         Provide employee count, headquarters location, and major offices.
@@ -40,7 +40,7 @@ def research_company(company_name, detailed=False):
         State the latest annual revenue (if public) or notable funding rounds (if private).
 
         ## Marketing Data
-        Provide recent marketing data, including ad spend, digital vs. traditional breakdown, and any available marketing assets or campaign examples.
+        Provide recent marketing data, including ad spend, the breakdown of digital vs. traditional marketing, and any available marketing assets or campaign examples.
 
         ## Unique Aspects
         Highlight 2-3 distinctive features or achievements.
@@ -54,7 +54,7 @@ def research_company(company_name, detailed=False):
         - **Products & Services:** Key offerings with a brief description.
         - **Industry & Competitors:** The industry and 3-4 major competitors.
         - **Recent News:** 2-3 key events from the last 6 months (only include recent news from 2024-2025; avoid outdated info such as from 2021).
-        - **Executive Team:** List the current CEO, CFO, and one other key executive. Verify these details by referencing the company's official website and include the website URL if available.
+        - **Executive Team:** List the current CEO, CFO, and one other key executive. Verify these details by referencing the company's official website. If you cannot verify, append the note: "This might be outdated, please reference the company's official website:" with the URL if available.
         - **Size & Location:** Employee count, headquarters, and major offices.
         - **Revenue/Funding:** Latest annual revenue (if public) or notable funding rounds.
         - **Marketing Data:** A summary of recent marketing data including ad spend, digital vs. traditional breakdown, and any available marketing assets or campaign examples.
@@ -64,13 +64,15 @@ def research_company(company_name, detailed=False):
         """
     
     response = openai.chat.completions.create(
-        model="gpt-4o",  # Using GPT-4o with search capabilities
+        model="gpt-4o",  # Using GPT-4o with real-time search capabilities
         messages=[
             {
                 "role": "system",
                 "content": (
                     "You are a helpful research assistant with real-time search capabilities. "
-                    "Use the web, especially the official company website, to verify all information—particularly for C-level executive data—and ensure that all news and data are current as of 2025."
+                    "Use the web, especially the official company website, to verify all information—particularly C-level executive data. "
+                    "If you cannot fully verify the current data, include the note: 'This might be outdated, please reference the company's official website:' followed by the URL if available. "
+                    "Ensure all news and data are current as of 2025."
                 )
             },
             {"role": "user", "content": prompt}
